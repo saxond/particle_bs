@@ -1,7 +1,6 @@
 
-#include "HttpClient.h"
 #include <math.h>
-//#include "application.h"
+#include "application.h"
 
 #include "TM1637.h"
 
@@ -13,12 +12,13 @@ void dispNum(unsigned int num);
 #define DIO D5
 TM1637 tm1637(CLK,DIO);
 
-HttpClient http;
-
-http_header_t headers[] = {
-    { "X-Api-Key" , ""},
-    { NULL, NULL } // NOTE: Always terminate headers will NULL
-};
+int displayNum(String num) {
+  Serial.print(num);
+  char* buf = new char[num.length() + 1];
+  num.toCharArray(buf, num.length() + 1);
+  dispNum(atoi(buf));
+  return 0;
+}
 
 // This routine runs only once upon reset
 void setup()
@@ -27,33 +27,23 @@ void setup()
   tm1637.init();                                // clear the display
   Serial.begin(9600);                           // init serial port on USB interface
   Serial.print("Setup");
+
+  dispNum(666);
+  Particle.function("display", displayNum);
 }
 
 // This routine loops forever
 void loop()
 {
-  Serial.print("loop");
+  //Serial.print("loop");
 
-  http_request_t request;
-  http_response_t response;
-
-  request.hostname = "";
-  request.port = 443;
-  request.path = "/v2/applications/XXX/metrics/data.json?names[]=OtherTransaction/Custom/com.newrelic.metricindexer.consumer.MetricConsumer&values[]=requests_per_minute&summarize=true";
-
-
-  // The library also supports sending a body with your request:
-  //request.body = "{\"key\":\"value\"}";
-
-  // Get request
-  http.get(request, response, headers);
-  Serial.print("Application>\tResponse status: ");
-  Serial.println(response.status);
-  Serial.println(response.body);
-
-
+/*
   dispNum((unsigned int) 666);  // display devil cock
   delay(200);
+
+  dispNum((unsigned int) 555);  // display devil cock
+  delay(200);
+  */
 }
 
 // display a integer value less then 10000
