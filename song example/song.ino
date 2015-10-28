@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////
+// From the grove starter kit examples
+////////////////////////////////////////////////////////////////////////////
+
 #include "application.h"
 
 #define BUTTONPIN D2
@@ -12,7 +16,7 @@ void setup() {
 
 void loop() {
   if (digitalRead(BUTTONPIN) == 1) {
-    for (int thisNote = 0; thisNote < 8; thisNote++) {
+    for (int thisNote = 0; thisNote < sizeof(melody) / sizeof(int); thisNote++) {
       int duration = 1000/noteDurations[thisNote];
       tone(BUZZERPIN, melody[thisNote], duration);
       int pauseBetweenNotes = duration * 1.3;
